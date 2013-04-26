@@ -1,4 +1,4 @@
-### i/o functions
+### library of i/o functions
 
 read.graffiti <- function() {
   ### get the raw graffiti data prior to about 4/24/2013
@@ -12,3 +12,4 @@ read.graffiti <- function() {
   graffiti=data.table(read.csv(file,sep=',',stringsAsFactors=T))
   return(graffiti)
 }
+

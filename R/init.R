@@ -15,13 +15,15 @@ if (rootdir == "" & !file.exists(datadir)) {
 FORCEREAD = FALSE
 
 ### get the directories
-Rdir=paste(rootdir,"R",sep="/")
-raw.datadir=paste(datadir,"raw",sep="/")
-clean.datadir=paste(datadir,"clean",sep="/")
+Rdir=file.path(rootdir,"R")
+raw.datadir=file.path(datadir,"raw")
+clean.datadir=file.path(datadir,"clean")
+plotdir=file.path(datadir,"plots",Sys.info()["user"])
+dir.create(plotdir,showWarnings = FALSE)
 
 ### source the needed libraries
-source(paste(Rdir,"IO.R",sep="/"))
-source(paste(Rdir,"CacheData.R",sep="/"))
+source(file.path(Rdir,"IO.R"))
+source(file.path(Rdir,"CacheData.R"))
 
 ### done
 print("Chicago 311 package loaded")
