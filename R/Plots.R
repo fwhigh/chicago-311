@@ -101,21 +101,3 @@ graffiti.time.histograms <- function(dopng=T,
   options(warn=warn.state)
 
 }
-
-graffiti.time.series.plot <- function() {
-  require(zoo)
-  
-  times <- as.character(GRAFFITI$Creation.Date)
-#  times <- as.POSIXct(as.Date())
-  times <- as.Date(times,"%m/%d/%Y")
-
-  # irregular zoo time series counting discrete events
-  t.raw <- zoo(array(1,length(times)),
-               times)
-  n.days = ceiling(as.numeric(end(t.raw)-start(t.raw)))
-  daily.times <- zooreg(as.numeric(array(-1,n.days)),
-                      start=as.Date(start(t.raw)))
-
-  
-  browser()
-}

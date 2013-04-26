@@ -18,3 +18,8 @@ Once you've pulled the github repo, add the following line to your local .Renvir
 Now in R, run the following lines to load functions, cache the main data tables, and run some tests.
 
 	source('init.R')
+
+Recreate Discovery Session
+--------------------------
+
+	source('Discovery.R')

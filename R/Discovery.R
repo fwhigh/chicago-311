@@ -12,4 +12,3 @@ print(length(GRAFFITI$Creation.Date))
 
 graffiti.time.histograms()
 
-#graffiti.time.series.plot()
