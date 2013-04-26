@@ -33,9 +33,6 @@ graffiti.time.histograms <- function(dopng=T,
                                extra=NULL) {
   require(ggplot2)
 
-  warn.state=getOption('warn')
-  options(warn=-1)
-    
   p <- ggplot(GRAFFITI,
               aes(x=Creation.Date)) 
   p = p + geom_histogram()
@@ -98,6 +95,18 @@ graffiti.time.histograms <- function(dopng=T,
   extra = "Community.Area"
   show_plot(p,dopng=dopng,file="graffiti_time_histogram",width=1100,height=900,extra=extra)
 
-  options(warn=warn.state)
+}
+
+graffiti.response.time.histograms <- function(dopng=T,
+                                              extra=NULL) {
+
+  GRAFFITI$Response.Time = GRAFFITI$Completion.Date - GRAFFITI$Creation.Date
+  
+  p <- ggplot(GRAFFITI,
+              aes(x=Response.Time)) 
+  p = p + geom_histogram()
+
+  extra='all'
+  show_plot(p,dopng=dopng,file="graffiti_response_time_histogram",width=1100,height=900,extra=extra)
 
 }
