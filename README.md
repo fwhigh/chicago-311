@@ -28,5 +28,7 @@ Additional resources
 --------------------
 
 http://servicetracker.cityofchicago.org/
+
 https://github.com/derekeder/311-explorer
+
 http://www.smartchicagocollaborative.org/the-launch-of-open311-in-chicago/
