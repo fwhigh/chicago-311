@@ -9,7 +9,14 @@ read.graffiti <- function() {
   ### do it
   file="311_Service_Requests_-_Graffiti_Removal.csv"
   file=paste(raw.datadir,file,sep="/")
-  graffiti=data.table(read.csv(file,sep=',',stringsAsFactors=T))
+  rdatafile=paste(file,'.rda',sep='')
+
+  if (!file.exists(rdatafile)) {
+    graffiti=data.table(read.csv(file,sep=',',stringsAsFactors=T))
+    save(graffiti,file=rdatafile)
+  } else {
+    load(rdatafile)
+  }
 
   # last row is bad
   graffiti=graffiti[-c(length(graffiti$Creation.Date)),]
