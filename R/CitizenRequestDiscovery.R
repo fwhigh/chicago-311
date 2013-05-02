@@ -3,6 +3,8 @@
 
 source(file.path(Rdir,"Plots.R"))
 
+require(ggplot2)
+
 
 print("columns:")
 print(names(GRAFFITI))
