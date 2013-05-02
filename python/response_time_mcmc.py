@@ -31,12 +31,17 @@ parser.add_option("-m", "--mock", dest="mock",
                   help="generate mock data?", 
                   action="store_true")
 parser.add_option("-n", "--npts", dest="npts",
-                  help="Number of data points to use, deafult 1e2", 
+                  help="Number of data points to use, deafult 1e2. Set to -1 to include all real data", 
+                  type='float',
                   metavar="N")
 parser.add_option("-e", "--figext", dest="figext",
                   help="Extension type of figure, default pdf", 
                   metavar="EXT")
 (options, args) = parser.parse_args()
+# validate commandline options
+if options.mock and options.npts <= 1:
+    raise RuntimeError('Must have npts > 1 when generating mock data')
+
 
 ### get the data
 dat = queueData(mock=options.mock,filename=options.filename,npts=options.npts)
@@ -120,6 +125,7 @@ except ImportError:
 
 
 ### make some figures
+
 # scatterplot of posterior probabilities
 if dat.mock:
     p0=[dat.shape, dat.rate]
@@ -162,7 +168,6 @@ plt.xlim([0,np.max(dat.wait_time)])
 plt.ylabel('Probability (arb. units)',size='12')
 plt.xlabel('Response time (days)',size='12')
 plt.semilogy()
-#plt.yscale('log')
 fig2.savefig(c.plotdir+'/graffiti_completion_time_hist.'+options.figext)
 
 

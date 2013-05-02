@@ -1,6 +1,7 @@
 import csv
 import numpy as np
 from datetime import datetime,timedelta
+import code
 
 class queueData:
     """
@@ -27,15 +28,15 @@ class queueData:
         self.wait_time = []
 
         if self.mock:
-            # Input model parameters
+            # get mock data
             mean = 10.*self.shape # mean duration for k events to happen
             self.rate = self.shape/mean # = lambda
-            self.wait_time = np.random.gamma(self.shape, 1/rate, self.npts)
+            self.wait_time = np.random.gamma(self.shape, 1/self.rate, self.npts)
         else:
             # get real data
+            csv_npts = self.file_len(self.filename)
             with open(self.filename, 'rb') as csvfile:
                 csvreader = csv.DictReader(csvfile)
-                csv_npts = 339476
                 all_wait_time = np.tile(-99,csv_npts)
                 i=0
                 for row in csvreader:
@@ -51,11 +52,16 @@ class queueData:
             self.wait_time=self.wait_time[self.wait_time < self.maxdays]
             if self.npts > 1:
                 self.wait_time=self.wait_time[np.random.random_integers(0,high=len(self.wait_time)-1,size=self.npts)]
-            if self.npts != len(self.wait_time):
+            if self.npts > 1 and self.npts != len(self.wait_time):
                 raise RuntimeError("something wrong")
 
             self.shape = None
             mean = None
             self.rate = None
 
+    def file_len(self,fname):
+        with open(fname) as f:
+            for i, l in enumerate(f):
+                pass
+        return i + 1
 
