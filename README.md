@@ -19,6 +19,16 @@ Now in R, run the following lines to load functions, cache the main data tables,
 
 	source('init.R')
 
+To run Python scripts, you must set the following environment variable.
+
+	setenv CHICAGO311DATA <your-dropbox-home>/chicago-311-data
+
+Then 
+
+	cd python
+	response_time_mcmc.py
+
+
 Recreate Discovery Session
 --------------------------
 
