@@ -4,7 +4,8 @@ Modeling response times.
 
 """
 
-from __future__ import print_function
+#from __future__ import print_function
+from optparse import OptionParser
 import chicago311.utils as utils
 import chicago311.init as c
 from chicago311.queuedata import queueData
@@ -17,15 +18,30 @@ from datetime import datetime,timedelta
 import code
 import statsmodels.api as sm
 
+### get commandline options
+parser = OptionParser()
+parser.set_defaults(mock=False,
+                    filename=c.datadir+'/raw/311_Service_Requests_-_Graffiti_Removal.csv',
+                    figext='pdf',
+                    npts=1e2)
+parser.add_option("-f", "--file", dest="filename",
+                  help="CSV file containing start and stop time data", 
+                  metavar="FILE")
+parser.add_option("-m", "--mock", dest="mock",
+                  help="generate mock data?", 
+                  action="store_true")
+parser.add_option("-n", "--npts", dest="npts",
+                  help="Number of data points to use, deafult 1e2", 
+                  metavar="N")
+parser.add_option("-e", "--figext", dest="figext",
+                  help="Extension type of figure, default pdf", 
+                  metavar="EXT")
+(options, args) = parser.parse_args()
 
-mock = True
-filename=c.datadir+'/raw/311_Service_Requests_-_Graffiti_Removal.csv'
-dat = queueData(mock=mock,filename=filename,npts=1e2)
+### get the data
+dat = queueData(mock=options.mock,filename=options.filename,npts=options.npts)
 
-## figure type
-figext = '.pdf'
-#figext = '.png'
-
+### do mcmc
 # We'll sample a 2 parameter Gamma distribution
 ndim = 2
 
@@ -103,21 +119,20 @@ except ImportError:
 
 
 
-
-
-data = [sampler.flatchain[:,0], sampler.flatchain[:,1]]
-data_name = ['shape', 'rate (1/min)']
+### make some figures
+# scatterplot of posterior probabilities
 if dat.mock:
     p0=[dat.shape, dat.rate]
 else:
     p0=None
-fig = utils.scatterplot(data, data_name, p0=p0)
-fig.savefig(c.plotdir+'/graffiti_completion_time_scatterplot'+figext)
-#plt.show() 
+fig = utils.scatterplot([sampler.flatchain[:,0], sampler.flatchain[:,1]], 
+                        ['shape', 'rate (1/min)'], 
+                        p0=p0)
+fig.savefig(c.plotdir+'/graffiti_completion_time_scatterplot.'+options.figext)
 
 
 
-# Probility density
+# probability density of data and median distribution model
 fig2 = plt.figure() 
 count, bins, ignored = plt.hist(dat.wait_time,
                                 50,
@@ -148,21 +163,18 @@ plt.ylabel('Probability (arb. units)',size='12')
 plt.xlabel('Response time (days)',size='12')
 plt.semilogy()
 #plt.yscale('log')
-fig2.savefig(c.plotdir+'/graffiti_completion_time_hist'+figext)
+fig2.savefig(c.plotdir+'/graffiti_completion_time_hist.'+options.figext)
 
 
 
-# Empirical cumulative distribution
+# empirical cumulative distribution function
 xlim = [0,400]
 xtextpos = 300
 fig3 = plt.figure()
-#ecdf = np.cumsum(x_sort)/float(np.sum(x))*100
 ecdf = sm.distributions.ECDF(dat.wait_time)
-#plt.plot(x_sort,ecdf,'D',markersize=4,markerfacecolor='blue',markeredgecolor='blue')
 x_ecdf = np.linspace(min(dat.wait_time), max(dat.wait_time))
 y_ecdf = ecdf(x_ecdf)
 plt.plot(x_ecdf,y_ecdf*100,'-',color='blue',linewidth=3)
-         #markersize=4,markerfacecolor='blue',markeredgecolor='blue')
 plt.xlim(xlim)
 plt.ylim([0,100])
 plt.ylabel('Cumulative fraction (%)',size='12')
@@ -177,4 +189,4 @@ for i in range(len(quantiles)):
     p = utils.percentile(x_sort,q/100.)
     plt.text(xtextpos,positions[i], "%2i" % q, fontsize=12, horizontalalignment='right')
     plt.text(xtextpos,positions[i], "    %2i" % p, fontsize=12, horizontalalignment='left')
-fig3.savefig(c.plotdir+'/graffiti_completion_time_ecdf'+figext)
+fig3.savefig(c.plotdir+'/graffiti_completion_time_ecdf.'+options.figext)
