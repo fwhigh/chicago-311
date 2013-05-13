@@ -42,3 +42,13 @@ http://servicetracker.cityofchicago.org/
 https://github.com/derekeder/311-explorer
 
 http://www.smartchicagocollaborative.org/the-launch-of-open311-in-chicago/
+
+http://www.311.fm/
+
+http://311labs.org/experiments/dailybrief
+
+http://open311status.herokuapp.com/
+
+http://dailybrief.311labs.org/
+
+http://open311.org/
