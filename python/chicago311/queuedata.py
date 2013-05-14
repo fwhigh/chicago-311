@@ -31,8 +31,6 @@ class queueData:
 
         if self.mock:
             # get mock data
-            mean = 10.*self.shape # mean duration for k events to happen
-            self.rate = self.shape/mean # = lambda
             self.wait_time = np.random.gamma(self.shape, 1/self.rate, self.npts)
         else:
             # get real data
@@ -50,16 +48,20 @@ class queueData:
                 #print(response_time)
                 #print(row['Completion Date'] - row['Creation Date'])
                     i=i+1
-            self.wait_time=all_wait_time[all_wait_time > 0]
-            self.wait_time=self.wait_time[self.wait_time < self.maxdays]
+            self.wait_time=all_wait_time[(all_wait_time > 0) &
+                                         (all_wait_time < self.maxdays)]
             if self.npts > 1:
                 self.wait_time=self.wait_time[np.random.random_integers(0,high=len(self.wait_time)-1,size=self.npts)]
             if self.npts > 1 and self.npts != len(self.wait_time):
                 raise RuntimeError("something wrong")
 
             self.shape = None
-            mean = None
+            #mean = None
             self.rate = None
+
+    def gammaMean(self):
+        return 10.*self.shape # mean duration for k events to happen
+
 
     def file_len(self,fname):
         with open(fname) as f:
