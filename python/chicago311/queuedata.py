@@ -27,6 +27,8 @@ class queueData:
         self.maxdays = maxdays
         self.wait_time = []
 
+    def get(self):
+
         if self.mock:
             # get mock data
             mean = 10.*self.shape # mean duration for k events to happen

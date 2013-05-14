@@ -44,7 +44,10 @@ if options.mock and options.npts <= 1:
 
 
 ### get the data
-dat = queueData(mock=options.mock,filename=options.filename,npts=options.npts)
+dat = queueData(mock=options.mock,
+                filename=options.filename,
+                npts=options.npts)
+dat.get()
 
 ### do mcmc
 # We'll sample a 2 parameter Gamma distribution
