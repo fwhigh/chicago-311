@@ -37,6 +37,9 @@ parser.add_option("-n", "--npts", dest="npts",
 parser.add_option("-e", "--figext", dest="figext",
                   help="Extension type of figure, default pdf", 
                   metavar="EXT")
+parser.add_option("-g", "--geojson-file", dest="geojson_file",
+                  help="Write geojson file?", 
+                  metavar="FILE")
 (options, args) = parser.parse_args()
 # validate commandline options
 if options.mock and options.npts <= 1:
@@ -48,6 +51,8 @@ dat = queueData(mock=options.mock,
                 filename=options.filename,
                 npts=options.npts)
 dat.get()
+if options.geojson_file is not None:
+    dat.write_geojson(c.datadir+'/clean/'+options.geojson_file)
 
 ### do mcmc
 # We'll sample a 2 parameter Gamma distribution
