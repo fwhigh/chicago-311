@@ -37,11 +37,17 @@
   <div id='map'></div>
 </div>
 <script type="text/javascript">
+
+  var southWest = new L.LatLng(41.4, -88.10),
+    northEast = new L.LatLng(42.3, -87.10),
+    bounds = new L.LatLngBounds(southWest, northEast);
+
   var map = L.map('map', {
     center: [41.8500, -87.6500],
     zoom: 10,
     minZoom: 10,
-    maxZoom: 14
+    maxZoom: 14,
+    maxBounds: bounds
   });
 
   // Singleton
