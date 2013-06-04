@@ -3,6 +3,8 @@ chicago-311
 
 Chicago 311 data science
 
+There are 2 branches.  The master branch contains the analytics code, and the gh-pages contains the web page at http://fwhigh.github.io/chicago-311/.
+
 Getting started
 ---------------
 
