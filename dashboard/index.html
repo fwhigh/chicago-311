@@ -21,11 +21,17 @@
     .wax-legends { right:10px; bottom:10px; z-index:999999;}
     .legend, .tooltip { 
       padding: 6px 8px;
-      font: 14px/16px Arial, Helvetica, sans-serif;
+      <!--font: 14px/16px 'Helvetica Neue', Helvetica, sans-serif; -->
+      font: 11px 'Helvetica Neue', Helvetica, sans-serif;
       background: white;
       background: rgba(255,255,255,0.8);
       box-shadow: 0 0 15px rgba(0,0,0,0.2);
-      border-radius: 5px;
+      border-radius: 7px;
+    }
+    .tooltip .top_label { font: 12px; 
+      font-weight: bold;
+      color: #403d3d;
+      margin-bottom: 5px;
     }
     div.leaflet-tile-pane {
       border: 1px solid black !important;
@@ -83,7 +89,7 @@
       return this.container;
     },
     populate: function(content) {
-      this.container.innerHTML = content;
+      this.container.innerHTML = "<div class='top_label'>Cell information:<br></div>" + content;
       this.container.style.display = '';
     },
     clear: function() {
@@ -158,7 +164,12 @@
       var view = {};
       view['__' + templateKey + '__'] = true;
       for(var field in data) {
-        view[field] = data[field];
+        if (field === 'density')
+          { view[field] = Math.round(data[field]);  }
+        else if (field === "area") 
+          { view[field] = Math.round(data[field] * 10) / 10 }
+        else
+          {view[field] = data[field];}
       }
       return Mustache.render(template, view);
     }
@@ -176,8 +187,8 @@
   baseLayer.addTo(map);
 
   layerManager.layerControl.addBaseLayer(new L.LayerGroup(), 'None');
-  layerManager.setupLayer('http://api.tiles.mapbox.com/v3/fwhigh.tracts-choropleth-test.jsonp', 'Census Choropleth', false);
-  layerManager.setupLayer('http://api.tiles.mapbox.com/v3/fwhigh.hex-choropleth-test.jsonp', 'Hex Choropleth', true);
+  layerManager.setupLayer('http://api.tiles.mapbox.com/v3/svetlana.311_project_updated_1.jsonp', 'Hex Choropleth', true);
+  layerManager.setupLayer('http://api.tiles.mapbox.com/v3/svetlana.311_project_updated_1.jsonp', 'Hex Choropleth', true);
 </script>
 
 </body>
